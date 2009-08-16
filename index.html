@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Multi Elements Cycle Plugin Demo</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="multipleelements.cycle.css">
+		<script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="jquery.multipleelements.cycle.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				<!-- Example -->
+				$("#exampleDemo").multipleElementsCycle({
+					'elementContainer': '#exampleElements',
+					'prevElement': '#exampleLeft',
+					'nextElement': '#exampleRight'
+				});
+				
+				<!-- Plain Defaults -->
+				$("#plainDemo").multipleElementsCycle();
+				
+				<!-- Custom One -->
+				$("#fixedStartDemo").multipleElementsCycle({
+					'elementContainer': '#cycleElementsQuickly',
+					'prevElement': '#cycleElementsQuicklyLeft',
+					'nextElement': '#cycleElementsQuicklyRight',
+					'speed': 1000,
+					'overrideStart': 0,
+					'showCount': 3
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<h1>Multiple Elements Cycle Plugin</h1>
+		
+		<p>Provides a simple preview scrolling panel of list items. Shows the given range of li items from the middle (hiding the edges items) and allows scrolling left and right within the list. Does not handle automatic scrolling or wrapping items around.</p>
+		<p>This script was designed to be lightweight. If you are looking for more advanced script then I recommend the <a href="http://malsup.com/jquery/cycle/">jQuery Cycle Plugin</a></p>
+		<p>It styles list items which can contain images, videos, text or combinations.</p>
+		<div class="cycleElementsContainer" id="exampleDemo">
+			<div class="cycleElementsArrow">
+				<a href="#" id="exampleLeft">Scroll Left</a>
+			</div>
+			<div id="exampleElements">
+				<ul>			
+					<li>#1</li>
+					<li>#2</li>
+					<li>#3</li>
+					<li>#4</li>
+					<li>#5</li>	
+					<li>#6</li>
+				</ul>
+			</div>
+			<div class="cycleElementsArrow">
+				<a href="#" id="exampleRight">Scroll Right</a>
+			</div>
+		</div>
+		<p id="Contents">Contents: <a href="#Installing">Installing</a> | <a href="#Examples">Examples</a> | <a href="#Configuration">Configuration</a> | <a href="#Credit">Credits</a></p>
+			
+		<h2 id="Installing">Installing</h2>
+		<h3>Step 1: Include the files in your Project</h3>
+		<p>You need to include the <a href="http://www.jquery.com">jQuery</a> library. This comes bundled with jQuery 1.3.2. You also need to include the <em>jquery.multipleelements.cycle.js</em> in your page. </p>
+		<pre><code>&lt;script type="text/javascript" src="jquery-1.3.2.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="jquery.multipleelements.cycle.js"&gt;&lt;/script&gt;
+		</code></pre>
+		
+		<h3>Step 2: Setup your HTML</h3>
+		<pre><code>&lt;div class="cycleElementsContainer" id="plainDemo"&gt;
+	&lt;a href="#" id="cycleElementsLeft">Scroll Left&lt;/a&gt;
+	&lt;div id="cycleElements"&gt;
+		&lt;ul>			
+			&lt;li&gt;#1&lt;/li&gt;
+			&lt;li&gt;#2&lt;/li&gt;
+			&lt;li&gt;#3&lt;/li&gt;
+			&lt;li&gt;#4&lt;/li&gt;
+			&lt;li&gt;#5&lt;/li&gt;	
+			&lt;li&gt;#6&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/div&gt;
+	&lt;a href="#" id="cycleElementsRight"&gt;Scroll Right&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+		<h3>Step 3: Configure</h3>
+		<p>Once you have included the JS and the html then you need to define your own CSS styles and initialize the JS effect</p>
+		<pre><code><span class="com">/* CSS */</span>
+.cycleElementsContainer li { width: XXXX; float: left; }
+</code></pre>
+
+<pre><code><span class="com">/* HTML */</span>
+&lt;script type="text/javascript"&gt;
+	$(document).ready(function() {
+		$("#plainDemo").multipleElementsCycle();
+	});
+&lt;/script&gt;
+</code></pre>
+		
+		<h2 id="Examples">Examples</h2>
+		
+		<h3>Plain Install</h3>
+		<pre><code>$(document).ready(function() {
+	$("#plainDemo").multipleElementsCycle();
+});</code></pre>
+		<div class="cycleElementsContainer" id="plainDemo">
+			<div class="cycleElementsArrow">
+				<a href="#" id="cycleElementsLeft">Scroll Left</a>
+			</div>
+			<div id="cycleElements">
+				<ul>			
+					<li>#1</li>
+					<li>#2</li>
+					<li>#3</li>
+					<li>#4</li>
+					<li>#5</li>	
+					<li>#6</li>
+					<li>#7</li>
+					<li>#8</li>
+					<li>#9</li>
+				</ul>
+			</div>
+			<div class="cycleElementsArrow">
+				<a href="#" id="cycleElementsRight">Scroll Right</a>
+			</div>
+		</div>
+		<h3>Fixed Start (0) and Slower Speed. Limited to 3. Custom IDs for Next / Prev</h3>
+			<pre><code>$(document).ready(function() {
+		$("#fixedStartDemo").multipleElementsCycle({
+			'elementContainer': '#cycleElementsQuickly',
+			'prevElement': '#cycleElementsQuicklyLeft',
+			'nextElement': '#cycleElementsQuicklyRight',
+			'speed': 1000,
+			'overrideStart': 0,
+			'showCount': 3
+		});
+});</code></pre>
+		<div class="cycleElementsContainer" id="fixedStartDemo">
+			<div class="cycleElementsArrow">
+				<a href="#" id="cycleElementsQuicklyLeft">Scroll Left</a>
+			</div>
+			<div id="cycleElementsQuickly">
+				<ul>			
+					<li>#1</li>
+					<li>#2</li>
+					<li>#3</li>
+					<li>#4</li>
+					<li>#5</li>	
+					<li>#6</li>
+					<li>#7</li>
+					<li>#8</li>
+					<li>#9</li>
+					<li>#10</li>
+				</ul>
+			</div>
+			<div class="cycleElementsArrow">
+				<a href="#" id="cycleElementsQuicklyRight">Scroll Right</a>
+			</div>
+		</div>
+		<h2 id="Configuration">Configuration</h2>
+		<pre><code>$(document).ready(function() {
+	$("#plainDemo").multipleElementsCycle({
+		elementContainer: '#cycleElements',	<span class="com">// Selector for element (ul) container (Selector)</span>
+		prevElement: '#cycleElementsLeft',	<span class="com">// Selector to scroll previous (Selector)</span>
+		nextElement: '#cycleElementsRight',	<span class="com">// Selector to scroll next (Selector)</span>
+		speed: 500,				<span class="com">// Speed to scroll elements (Int)</span>
+		containerWidth: false,			<span class="com">// Override default width (Int)</span>
+		showCount: 4				<span class="com">// Items to show from the list (Int)</span>
+		overrideStart: false			<span class="com">// Override the start with a defined value (int)</span>
+	});
+});
+	</code></pre>
+		<h2 id="Credit">Credit</h2>
+		<p>Copyright (c) 2009 Will Rossiter (<a href="http://www.willr.co.nz">willr.co.nz</a>). Licensed under the BSD license.</p>
+
+	</body>
+</html>
