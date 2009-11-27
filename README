@@ -1,0 +1,8 @@
+Multiple Elements Cycle Plugin
+-----
+
+Provides a simple preview scrolling panel of list items. Shows the given range of li items from the middle (hiding the edges items) and allows scrolling left and right within the list. Does not handle automatic scrolling or wrapping items around.
+
+This script was designed to be lightweight. If you are looking for more advanced script then I recommend the jQuery Cycle Plugin
+
+For installation and demos see demo/index.html
