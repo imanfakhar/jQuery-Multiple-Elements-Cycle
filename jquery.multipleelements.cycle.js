@@ -9,10 +9,11 @@
 
  *
  * @author Will Rossiter <will.rossiter@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 (function($) {
 	$.fn.multipleElementsCycle = function(options){
+		
 		var defaults = {
 			elementContainer: '#cycleElements',	// Selector for element (ul) container (selector)
 			prevElement: '#cycleElementsLeft',	// Selector to scroll previous (selector)
@@ -23,16 +24,14 @@
 			overrideStart: false				// Override the start with a defined value (int)
 		};
 		
-		var options = $.extend(defaults, options);  
+		var options = $.extend(defaults, options);
 				
 		this.each(function() {
-			
 			// GET ELEMENTS
 			var totalElements = $(this).find("li");
 			var maxIndex = totalElements.length - 1;
 			
 			// WORK OUT START INDEX
-			// assumes that total elements is greater then the slice
 			var lowerIndex = (options.overrideStart === false) ? Math.floor((maxIndex - options.showCount + 1) / 2) : options.overrideStart;
 			var elementWidth = $(this).find("li").outerWidth(true);
 			var margin = ((lowerIndex) * elementWidth) * -1;
@@ -58,55 +57,39 @@
 			});
 			
 			// INIT
-			cycle("load");
+			$("ul",parent).animate({marginLeft: margin}, options.speed);
 			
-			// CLICK
-			$(options.nextElement).click(function(){ cycle("next"); return false; });
-			$(options.prevElement).click(function(){ cycle("prev"); return false; });	
-			
-			// CYCLE
-			function cycle(dir){			
-				switch(dir){
-					case "next":
-						if(upperIndex <= maxIndex) {
-							$(options.prevElement).show();
-							margin = margin - elementWidth;
-							upperIndex = upperIndex + 1;
-							lowerIndex = lowerIndex + 1;
-							$("ul",parent).animate({
-									marginLeft: margin
-								},options.speed);
-								
-							if(upperIndex > maxIndex) {
-								$(options.nextElement).hide();
-							}
-						}					
-						break;	
-					case "prev":
-						if(lowerIndex >= 0) {
-							$(options.nextElement).show();	
-							upperIndex = upperIndex - 1;
-							lowerIndex = lowerIndex - 1;
-							margin = margin + elementWidth;
-							$("ul",parent).animate({
-								marginLeft: margin
-							}, options.speed);
-							if((lowerIndex-1) < 0) {
-								$(options.prevElement).hide();
-							}
+			var cycle = {
+				next: function() {
+					if(upperIndex <= maxIndex) {
+						$(options.prevElement).show();
+						margin = margin - elementWidth;
+						upperIndex = upperIndex + 1;
+						lowerIndex = lowerIndex + 1;
+						$("ul",parent).animate({marginLeft: margin},options.speed);
+
+						if(upperIndex > maxIndex) {
+							$(options.nextElement).hide();
 						}
-						break;
-						
-					case "load": {
-						$("ul",parent).animate({
-							marginLeft: margin
-						}, options.speed);
-						break;
 					}
-					default:
-						break; 
-				};													
+				},
+				prev: function() {
+					if(lowerIndex >= 0) {
+						$(options.nextElement).show();	
+						upperIndex = upperIndex - 1;
+						lowerIndex = lowerIndex - 1;
+						margin = margin + elementWidth;
+						$("ul",parent).animate({marginLeft: margin}, options.speed);
+						if((lowerIndex-1) < 0) {
+							$(options.prevElement).hide();
+						}
+					}
+				}
 			};
-		}); 
+				
+			// CLICK
+			$(options.nextElement).click(function(){ cycle.next(); return false; });
+			$(options.prevElement).click(function(){ cycle.prev(); return false; });
+		});	
 	};
 })(jQuery);
