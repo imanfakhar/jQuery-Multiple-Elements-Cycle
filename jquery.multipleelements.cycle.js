@@ -9,7 +9,7 @@
 
  *
  * @author Will Rossiter <will.rossiter@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 (function($) {
 	$.fn.multipleElementsCycle = function(options){
@@ -21,7 +21,8 @@
 			speed: 500,							// Speed to scroll elements (int)
 			containerWidth: false,				// Override default width (int with size)
 			showCount: 4,						// Items to show from the list (int)
-			overrideStart: false				// Override the start with a defined value (int)
+			overrideStart: false,				// Override the start with a defined value (int)
+			jumpTo: false
 		};
 		
 		var options = $.extend(defaults, options);
@@ -39,12 +40,8 @@
 			var parent = $(this);
 			
 			// HIDE ARROWS IF NONE
-			if(upperIndex >= totalElements.length) {
-				$(options.nextElement).hide();
-			}
-			if(lowerIndex <= 0) {
-				$(options.prevElement).hide();
-			}
+			if(upperIndex >= totalElements.length) $(options.nextElement).hide();
+			if(lowerIndex <= 0) $(options.prevElement).hide(); 
 			
 			// SORT OUT STYLES
 			$(this).find(options.elementContainer).css({
@@ -68,9 +65,7 @@
 						lowerIndex = lowerIndex + 1;
 						$("ul",parent).animate({marginLeft: margin},options.speed);
 
-						if(upperIndex > maxIndex) {
-							$(options.nextElement).hide();
-						}
+						if(upperIndex > maxIndex) $(options.nextElement).hide();
 					}
 				},
 				prev: function() {
@@ -80,16 +75,49 @@
 						lowerIndex = lowerIndex - 1;
 						margin = margin + elementWidth;
 						$("ul",parent).animate({marginLeft: margin}, options.speed);
-						if((lowerIndex-1) < 0) {
-							$(options.prevElement).hide();
-						}
+						
+						if((lowerIndex-1) < 0) $(options.prevElement).hide();
 					}
+				},
+				toPoint: function(pos) {
+					var oldUpper = upperIndex;
+					if(pos == 0) {
+						// jump to end
+						upperIndex = maxIndex + 1;
+						lowerIndex = upperIndex - options.showCount;
+					}
+					else if(pos < 0) {
+						// offset from end
+						upperIndex = maxIndex + parseInt(pos);
+						lowerIndex = lowerIndex + parseInt(pos);
+					}
+					else {
+						// offset from start
+						lowerIndex = pos - 1;
+						upperIndex = lowerIndex + options.showCount;
+					}
+					// if the upper index is 
+					var newwidth = (elementWidth * (oldUpper-upperIndex));
+
+					margin = margin + newwidth;
+					$("ul",parent).animate({marginLeft: margin},options.speed);
+
+					if(upperIndex >= maxIndex) $(options.nextElement).hide();
+					else $(options.nextElement).show();
+					
+					if(lowerIndex == 0) $(options.prevElement).hide();
+					else $(options.prevElement).show();
 				}
 			};
 				
 			// CLICK
 			$(options.nextElement).click(function(){ cycle.next(); return false; });
 			$(options.prevElement).click(function(){ cycle.prev(); return false; });
+
+			// JUMP
+			if($(options.jumpTo)) {
+				$(options.jumpTo).click(function() { cycle.toPoint($(this).attr('rel')); return false; });
+			}
 		});	
 	};
 })(jQuery);

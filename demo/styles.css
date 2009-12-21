@@ -4,7 +4,7 @@
  *
  * You only *need* a width and a float on the individual li.
  *
- * Copyright (c) 2009 Will Rossiter (willr.co.nz)
+ * Copyright (c) 2009 Will Rossiter (willrossi.com
  *
  * @author Will Rossiter <will.rossiter@gmail.com>
  * @version 0.1
@@ -46,7 +46,9 @@ p {
 	margin-bottom: 18px;
 	color: #666;
 }
-
+	.center {
+		text-align: center;
+	}
 pre {
 	font-family: monospace;
 	background: #f4f4f4;
