@@ -22,7 +22,7 @@
 			containerWidth: false,				// Override default width (int with size)
 			showCount: 4,						// Items to show from the list (int)
 			overrideStart: false,				// Override the start with a defined value (int)
-			jumpTo: false
+			jumpTo: false						// Selectors to use as jump list
 		};
 		
 		var options = $.extend(defaults, options);
@@ -115,7 +115,7 @@
 			$(options.prevElement).click(function(){ cycle.prev(); return false; });
 
 			// JUMP
-			if($(options.jumpTo)) {
+			if(options.jumpTo) {
 				$(options.jumpTo).click(function() { cycle.toPoint($(this).attr('rel')); return false; });
 			}
 		});	
