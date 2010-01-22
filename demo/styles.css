@@ -19,7 +19,7 @@ h3 { font-size: 18px; margin-bottom: 12px; }
 p { margin-bottom: 18px; color: #666;}
 
 .center { text-align: center; }
-pre { font-family: monospace; background: #f4f4f4; padding: 0 10px; font-size: 11px; margin-bottom: 18px; color: #666; }
+pre { font-family: Monaco,"Courier New",monospace; background: #f4f4f4; padding: 0 10px; font-size: 11px; margin-bottom: 18px; color: #666; }
 	pre .com { color: green; }
 	
 a { color: #5397cb; text-decoration: none; border-bottom: 1px solid #ddd;}
@@ -33,7 +33,7 @@ ul { margin-bottom: 18px; }
 	#Contents a { padding: 3px; }
 
 
-.cycleElementsContainer { padding: 10px; margin: 10px 0; overflow: hidden; border: 1px solid #dfdfdf; } 	
+.cycleElementsContainer { padding: 10px; margin: 18px 0; overflow: hidden; border: 1px solid #dfdfdf; } 	
 	.cycleElementsContainer div { float: left; }
 	.cycleElementsContainer .cycleElementsArrow { padding-top: 30px; text-align: center; width: 80px; }
 
