@@ -19,63 +19,74 @@
 		 * Setup default configuration options. To override any of these
 		 * options pass in the object to the multipleElementsCycle call
 		 * 
-		 * $("#container").multipleElementsCycle
+		 * $("#container").multipleElementsCycle({
+		 *		show: 5,
+		 *		container: ".test"
+		 * });
 		 */
 		var defaults = {
 			container: '#cycle',	// Selector for element (ul) container (selector)
 			prev: '#cycle-prev',	// Selector to scroll previous (selector)
 			next: '#cycle-next', 	// Selector to scroll next (selector)
 			speed: 500,				// Speed to scroll elements (int)
-			containerSize: false,	// Override default size (int with size)
+			containerSize: false,	// Override default size (int, px)
 			show: 4,				// Items to show from the list (int)
 			start: false,			// Override the start with a defined value (int)
 			jumpTo: false,			// Selectors to use as jump list
 			vertical: false,		// Whether Scroll is for vertical
-			scrollCount: 1			// How many elements to scroll when clicking next / prev	
+			scrollCount: 1,			// How many elements to scroll when clicking next / prev,
+			element: "li",			// Element which is cycled. Update this and parent (selector)
+			parent: "ul"			// Parent element which contains the elements (selector)
 		};
 		
 		var opts = $.extend(defaults, opts);
 				
 		return this.each(function() {
-			var totalElems = $(this).find("li");
-			var maxIndex = totalElems.length - 1;
+			var self = $(this);
+			
+			var elements = self.find(opts.element);
+			var maxIndex = elements.length - 1;
 			
 			// Calculate the start index. It will either work it out automatically based
 			// on the length of the list or use the provided opts.start value
-			var ll = (opts.start === false) ? Math.floor((maxIndex - opts.showCount + 1) / 2) : opts.start;
-			var size = (opts.vertical === false) ? $(this).find("li").outerWidth(true) : $(this).find("li").outerHeight(true);
-
+			var lowerIndex = (opts.start === false) ? Math.floor((maxIndex - opts.show + 1) / 2) : opts.start;
+			var upperIndex = lowerIndex + opts.show;
+			var size = (opts.vertical === false) ? elements.outerWidth(true) : elements.outerHeight(true);
 			var margin = ((lowerIndex) * size) * -1;
-			var upperIndex = lowerIndex + opts.showCount;
-			var parent = $(this);
-			
-			// HIDE ARROWS IF NEEDED
-			if(upperIndex >= totalElems.length) $(opts.next).hide();
+
+			// Hide the arrows if we are at the bounds
+			if(upperIndex >= elements.length) $(opts.next).hide();
 			if(lowerIndex <= 0) $(opts.prev).hide(); 
 			
 			if(opts.vertical === false) {
-				$(this).find(opts.elementContainer).css({
-					width: (opts.containerSize) ? opts.containerSize : size * opts.showCount,
+				$(this).find(opts.container).css({
+					width: (opts.containerSize) ? opts.containerSize : size * opts.show,
 					overflow: 'hidden'
 				});
-				$(this).find("ul").css({
-					width: (totalElems.length) * size,
+				
+				$(this).find(opts.parent).css({
+					width: (elements.length) * size,
 					padding: '0'
 				});
 				
-				$("ul",parent).animate({marginLeft: margin}, opts.speed);
+				$(opts.parent, self).animate({
+					marginLeft: margin
+				}, opts.speed);
 			}
 			else {
-				$(this).find(opts.elementContainer).css({
-					height: (opts.containerSize) ? opts.containerSize : size * opts.showCount,
+				$(this).find(opts.container).css({
+					height: (opts.containerSize) ? opts.containerSize : size * opts.show,
 					overflow: 'hidden'
 				});
-				$(this).find("ul").css({
-					height: (totalElems.length) * size,
+				
+				$(this).find(opts.parent).css({
+					height: (elements.length) * size,
 					padding: '0'
 				});
 				
-				$("ul",parent).animate({marginTop: margin}, opts.speed);
+				$(opts.parent, self).animate({
+					marginTop: margin
+				}, opts.speed);
 			}
 	
 			var cycle = {
@@ -83,17 +94,23 @@
 					if(upperIndex <= maxIndex) {
 						$(opts.prev).show();
 
-						var count = ((upperIndex+opts.scrollCount) > maxIndex) ? totalElems.length-upperIndex : opts.scrollCount;
+						var count = ((upperIndex+opts.scrollCount) > maxIndex) ? elements.length-upperIndex : opts.scrollCount;
 			
 						margin = margin - (size * count);
 						upperIndex = upperIndex + count;
 						lowerIndex = lowerIndex + count;
 						
-						if(opts.vertical === false)
-							$("ul",parent).animate({marginLeft: margin},opts.speed);
-						else
-							$("ul",parent).animate({marginTop: margin},opts.speed);
-							
+						if(opts.vertical === false) {
+							$(opts.parent, self).animate({
+								marginLeft: margin
+							},opts.speed);
+						}
+						else {
+							$(opts.parent, self).animate({
+								marginTop: margin
+							},opts.speed);
+						}
+						
 						if(upperIndex > maxIndex) $(opts.next).hide();
 					}
 				},
@@ -107,20 +124,26 @@
 						lowerIndex = lowerIndex - count;
 						margin = margin + (size * count);
 						
-						if(opts.vertical === false)
-							$("ul",parent).animate({marginLeft: margin}, opts.speed);
-						else
-							$("ul",parent).animate({marginTop: margin},opts.speed);
-							
+						if(opts.vertical === false) {
+							$(opts.parent, self).animate({
+								marginLeft: margin
+							}, opts.speed);
+						}
+						else {
+							$(opts.parent, self).animate({
+								marginTop: margin
+							}, opts.speed);
+						}
 						if((lowerIndex-1) < 0) $(opts.prev).hide();
 					}
 				},
 				toPoint: function(pos) {
 					var oldUpper = upperIndex;
+					
 					if(pos == 0) {
 						// jump to end
 						upperIndex = maxIndex + 1;
-						lowerIndex = upperIndex - opts.showCount;
+						lowerIndex = upperIndex - opts.show;
 					}
 					else if(pos < 0) {
 						// offset from end
@@ -130,16 +153,22 @@
 					else {
 						// offset from start
 						lowerIndex = pos - 1;
-						upperIndex = lowerIndex + opts.showCount;
+						upperIndex = lowerIndex + opts.show;
 					}
 					// if the upper index is 
 					margin = margin + (size * (oldUpper-upperIndex));
 					
-					if(opts.vertical === false) 
-						$("ul",parent).animate({marginLeft: margin},opts.speed);
-					else 
-						$("ul",parent).animate({marginTop: margin},opts.speed);
-						
+					if(opts.vertical === false) {
+						$(opts.parent, self).animate({
+							marginLeft: margin
+						},opts.speed);
+					}
+					else { 
+						$(opts.parent, self).animate({
+							marginTop: margin
+						}, opts.speed);
+					}
+					
 					if(upperIndex >= maxIndex) $(opts.next).hide();
 					else $(opts.next).show();
 					
@@ -147,16 +176,24 @@
 					else $(opts.prev).show();
 				}
 			};
+			
+			$(opts.next).live('click', function(e) { 
+				cycle.next();
 				
-			// CLICK
+				e.preventDefault();
+			});
+			
+			$(opts.prev).live('click', function(e) { 
+				cycle.prev(); 
+				
+				e.preventDefault();
+			});
 
-			$(opts.next).live('click', function(){ cycle.next();return false; });
-			$(opts.prev).live('click', function(){ cycle.prev(); return false; });
-
-			// JUMP
 			if(opts.jumpTo) {
-				$(opts.jumpTo).live('click', function() { 
-					cycle.toPoint($(this).data('position')); return false; 
+				$(opts.jumpTo).live('click', function(e) { 
+					cycle.toPoint($(this).data('position')); 
+					
+					e.preventDefault();
 				});
 			}
 		});	
