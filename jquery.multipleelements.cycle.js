@@ -10,7 +10,7 @@
  * Copyright 2011, Will Rossiter <will.rossiter@gmail.com>
  * Released under the BSD License.
  *
- * Version: 0.5
+ * Version: 1.0
  */
 (function($) {
 	$.fn.multipleElementsCycle = function(opts){
