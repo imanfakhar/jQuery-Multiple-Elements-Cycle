@@ -37,22 +37,22 @@ of the following options.
 	
 	<tbody>
 		<tr>
-			<td>elementContainer</td>
-			<td>Defines the container element which holds the UL.</td>
+			<td>container</td>
+			<td>Defines the container element which holds the list container.</td>
 			<td>Selector String (eg div#id, div.class)</td>
 			<td>#cycleElements</td>
 		</tr>
 		
 		<tr>
-			<td>prevElement</td>
-			<td>Define what when clicked, scrolls the list to the previous item.</td>
+			<td>prev</td>
+			<td>Defines the selector which scrolls the list to the previous item.</td>
 			<td>Selector String (eg #id, .class)</td>
 			<td>#cycleElementsLeft</td>
 		</tr>
 		
 		<tr>
-			<td>nextElement</td>
-			<td>Define what when clicked, scrolls the list to the next item</td>
+			<td>next</td>
+			<td>Define the selector which scrolls the list to the next item</td>
 			<td>Selector String (eg #id, .class)</td>
 			<td>#cycleElementsRight</td>
 		</tr>
@@ -79,7 +79,7 @@ of the following options.
 		</tr>
 		
 		<tr>
-			<td>overrideStart</td>
+			<td>start</td>
 			<td>Override the start value (normally centered) with a given start index</td>
 			<td>Integer</td>
 			<td>false</td>
@@ -87,7 +87,7 @@ of the following options.
 		
 		<tr>
 			<td>jumpTo</td>
-			<td>Selector to use as a Jump To List. See the #jumpToDemo in the demo/index.html</td>
+			<td>Selector to use as a jump to. Should have a data-position="" attribute. See the #jumpToDemo in the demo/index.html</td>
 			<td>Selector String (eg #id, .class)</td>
 			<td>false</td>
 		</tr>
@@ -97,6 +97,27 @@ of the following options.
 			<td>Define this scrolling list as vertical rather than side to side</td>
 			<td>Boolean</td>
 			<td>false</td>
+		</tr>
+		
+		<tr>
+			<td>scrollCount</td>
+			<td>Number of elements to scroll on each click. If this is out of bounds it will take the scroll the remaining items</td>
+			<td>Integer</td>
+			<td>1</td>
+		</tr>
+		
+		<tr>
+			<td>element</td>
+			<td>Element which is used as the scrollable container</td>
+			<td>Selector (eg li, div.class)</td>
+			<td>li</td>
+		</tr>
+		
+		<tr>
+			<td>parent</td>
+			<td>Selector which is the parent of the elements in the scrollable container</td>
+			<td>Selector (eg ul, div.class)</td>
+			<td>ul</td>
 		</tr>
 	</tbody>
 </table>

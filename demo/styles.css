@@ -37,12 +37,13 @@ ul { margin-bottom: 40px; }
 	li { margin: 0 0 10px 20px; color: #666; font-size: 13px; }
 	
 	
-#Contents { background: #f5f9fc; padding: 19px; color: #999; border: 1px solid #e5eef6; 
+.contents { background: #f5f9fc; padding: 19px; color: #999; border: 1px solid #e5eef6; 
 	-moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px;  color: #a9c6dc;}
 
-.cycleElementsContainer { padding: 9px; margin: 20px 0; overflow: hidden; border: 1px solid #dfdfdf;
+.cycleElementsContainer { padding: 9px; margin: 20px 0; overflow: hidden; border: 1px solid #eee;
 	-moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; } 	
 	.cycleElementsContainer div { float: left; }
+	.cycleElementsContainer .demoNavigation { clear: both; padding-top: 10px; float: none;}
 	.cycleElementsContainer .cycleElementsArrow { padding-top: 30px; text-align: center; width: 80px; }
 
 	/* Common List Styles
