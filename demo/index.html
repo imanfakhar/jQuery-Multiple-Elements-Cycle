@@ -4,16 +4,16 @@
 		<title>Multiple Elements Cycle Plugin Demo</title>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="styles.css">
-		<script type="text/javascript" src="../vendor/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="../vendor/jquery-1.5.min.js"></script>
 		<script type="text/javascript" src="../jquery.multipleelements.cycle.js"></script>
 		
 		<script type="text/javascript">
 			$(document).ready(function() {
 				<!-- Example -->
 				$("#exampleDemo").multipleElementsCycle({
-					elementContainer: '#exampleElements',
-					prevElement: '#exampleLeft',
-					nextElement: '#exampleRight'
+					container: '#exampleElements',
+					prev: '#exampleLeft',
+					next: '#exampleRight'
 				});
 				
 				<!-- Plain Defaults -->
@@ -22,25 +22,26 @@
 				<!-- Vertical Demo -->
 				$("#verticalDemo").multipleElementsCycle({
 					vertical: true,
-					prevElement: '#verticalPrev',
-					nextElement: '#verticalNext'
+					prev: '#verticalPrev',
+					next: '#verticalNext',
+					container: '#cycle-vert'
 				});
 				
 				<!-- Custom One -->
 				$("#fixedStartDemo").multipleElementsCycle({
-					elementContainer: '#cycleElementsQuickly',
-					prevElement: '#cycleElementsQuicklyLeft',
-					nextElement: '#cycleElementsQuicklyRight',
+					container: '#cycleElementsQuickly',
+					prev: '#cycleElementsQuicklyLeft',
+					next: '#cycleElementsQuicklyRight',
 					speed: 1000,
-					overrideStart: 0,
+					start: 0,
 					showCount: 3
 				});
 				
 				<!-- Jump to a given place by adding rel="3" to the selector-->
 				$("#jumpToDemo").multipleElementsCycle({
-					elementContainer: '#cycleToPointElements',
-					prevElement: '#cycleToPointPrev',
-					nextElement: '#cycleToPointNext',
+					container: '#cycleToPointElements',
+					prev: '#cycleToPointPrev',
+					next: '#cycleToPointNext',
 					jumpTo: '.cycleToPoint'
 				});
 			});
@@ -48,7 +49,8 @@
 	</head>
 
 	<body>
-		<h1>Multiple Elements Cycle Plugin <span>A jQuery Plugin. Version 0.5. Released 25 Jan 2010<span></h1>
+		<h1>Multiple Elements Cycle Plugin 
+			<span>jQuery Plugin. Version 0.5. Released 25 Jan 2010<span></h1>
 		
 		<p>Provides a simple preview scrolling panel of list items. Shows the given range of li items from the middle (hiding the edges items) and allows scrolling left and right within the list. Does not handle automatic scrolling or wrapping items around.</p>
 		<div class="cycleElementsContainer" id="exampleDemo">
@@ -78,9 +80,9 @@
 		<ul>
 			<li>Allows Multiple Individual Cycles on 1 page.</li>
 			<li>Flexible Setup - Widths and styles are controlled in your css.</li>
-			<li>Customizable Speed Options.</li>
-			<li><strong>*NEW*</strong> Ability to jump to a given item</li>
-			<li><strong>*NEW*</strong> Supports horizontal as well as vertical scrollers.</li> 
+			<li>Customizable Speed Options. <a href="#customised">Example</a></li>
+			<li>Ability to jump to a given item in the list. <a href="#jump-to">Example</a>.</li>
+			<li>Supports horizontal as well as vertical scrollers. <a href="#vertical">Example</a>.</li> 
 		</ul>
 		
 		<h2 id="Installing">Installing</h2>
@@ -131,9 +133,9 @@
 });</code></pre>
 		<div class="cycleElementsContainer" id="plainDemo">
 			<div class="cycleElementsArrow">
-				<a href="#" id="cycleElementsLeft">Scroll Left</a>
+				<a href="#" id="cycle-prev">Scroll Left</a>
 			</div>
-			<div id="cycleElements">
+			<div id="cycle">
 				<ul>			
 					<li>#1</li>
 					<li>#2</li>
@@ -147,11 +149,11 @@
 				</ul>
 			</div>
 			<div class="cycleElementsArrow">
-				<a href="#" id="cycleElementsRight">Scroll Right</a>
+				<a href="#" id="cycle-next">Scroll Right</a>
 			</div>
 		</div>
 		
-		<h3>Vertical Scrolling</h3>
+		<h3 id="vertical">Vertical Scrolling</h3>
 		<pre><code>$(document).ready(function() {
 	$("#verticalDemo").multipleElementsCycle({
 		vertical: true
@@ -163,7 +165,7 @@
 			<div class="cycleElementsArrow">
 				<a href="#" id="verticalPrev">Scroll Up</a>
 			</div>
-			<div id="cycleElements">
+			<div id="cycle-vert">
 				<ul>			
 					<li>#1</li>
 					<li>#2</li>
@@ -182,7 +184,7 @@
 		</div>
 
 
-		<h3>Fixed Start (0) and Slower Speed. Limited to 3. Custom IDs for Next / Prev</h3>
+		<h3 id="customised">Fixed Start (0) and Slower Speed. Limited to 3. Custom IDs for Next / Prev</h3>
 			<pre><code>$(document).ready(function() {
 	$("#fixedStartDemo").multipleElementsCycle({
 		elementContainer: '#cycleElementsQuickly',
@@ -217,7 +219,7 @@
 		</div>
 		
 		
-		<h3>Jump To: Links</h3>
+		<h3 id="jump-to">Jump To: Links</h3>
 		<p>Sometimes you will want custom buttons to jump to the end or start of a cycle. You can specify the selectors in the 'jumpTo' configuration.</p>
 		<p>The plugin will work out the offset from the rel tag on the selector. The offset can be the following formats - 0 for end of the page, negative values for offset on the right side or positive values for left offset.</p> 
 		<pre><code>$(document).ready(function() {
@@ -254,10 +256,10 @@
 				
 				<div class="demoNavigation">
 					<p class="center">	
-						<a href="#" class="cycleToPoint" rel="1">Scroll To Beginning</a> | 
-						<a href="#" class="cycleToPoint" rel="3">Scroll To 3rd Element</a> | 
-						<a href="#" class="cycleToPoint" rel="-1">Scroll To 2nd to Last</a> | 
-						<a href="#" class="cycleToPoint" rel="0">Scroll To End</a>
+						<a href="#" class="cycleToPoint" data-position="1">Scroll To Beginning</a> | 
+						<a href="#" class="cycleToPoint" data-position="3">Scroll To 3rd Element</a> | 
+						<a href="#" class="cycleToPoint" data-position="-1">Scroll To 2nd to Last</a> | 
+						<a href="#" class="cycleToPoint" data-position="0">Scroll To End</a>
 					</p>
 				</div>
 			</div>
@@ -278,8 +280,34 @@ $("#plainDemo").multipleElementsCycle({
 });
 	</code></pre>
 		<h2 id="Credit">Credit</h2>
-		<p>Copyright (c) 2010 Will Rossiter (<a href="http://www.willrossi.com">willrossi.com</a>). If you would like to contact me you can do so through my <a href="http://willrossi.com">website</a>. Suggestions, patches or enhancements to the code are more then welcome to be emailed through to me.</p> 
-		<p>Do only good. Licensed under the BSD license.</p>
+		<p>Copyright (c) 2011 Will Rossiter (<a href="http://www.willrossi.com">willrossi.com</a>). If you would like to contact me you can do so through my <a href="http://willrossi.com">website</a>. Suggestions, patches or enhancements to the code are more then welcome to be emailed through to me or 
+			submitted through <a href="https://github.com/willrossi/jquery-multiple-elements-cycle">github.com/willrossi/jquery-multiple-elements-cycle</a>.</p> 
+		
+		<h2 id="License">License</h2>
+		<p><pre>Copyright (c) 2011, Will Rossiter
+All rights reserved.
 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Will Rossiter nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY WILL ROSSITER ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL WILL ROSSITER BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+		</pre></p>
 	</body>
 </html>
