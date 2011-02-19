@@ -1,103 +1,118 @@
 /**
- * Multiple Elements Cycle Plugin.
+ * jQuery Multiple Elements Cycle Plugin.
  *
  * Provides a simple preview scrolling panel. Shows the given range of li items from the middle and
  * allows scrolling left and right within the list. Does not handle automatic scrolling / time based
  * or wrapping items around. 
  *
  * Note $.multipleElementsCycle needs to be called on a div containing a ul rather then the actual ul
-
- * @author Will Rossiter <will.rossiter@gmail.com>
- * @version 0.5
+ *
+ * Copyright 2011, Will Rossiter <will.rossiter@gmail.com>
+ * Released under the BSD License.
+ *
+ * Version: 0.5
  */
 (function($) {
-	$.fn.multipleElementsCycle = function(options){
+	$.fn.multipleElementsCycle = function(opts){
 		
+		/**
+		 * Setup default configuration options. To override any of these
+		 * options pass in the object to the multipleElementsCycle call
+		 * 
+		 * $("#container").multipleElementsCycle
+		 */
 		var defaults = {
-			elementContainer: '#cycleElements',	// Selector for element (ul) container (selector)
-			prevElement: '#cycleElementsLeft',	// Selector to scroll previous (selector)
-			nextElement: '#cycleElementsRight', // Selector to scroll next (selector)
-			speed: 500,							// Speed to scroll elements (int)
-			containerSize: false,				// Override default size (int with size)
-			showCount: 4,						// Items to show from the list (int)
-			overrideStart: false,				// Override the start with a defined value (int)
-			jumpTo: false,						// Selectors to use as jump list
-			vertical: false						// Whether Scroll is for vertical
+			container: '#cycle',	// Selector for element (ul) container (selector)
+			prev: '#cycle-prev',	// Selector to scroll previous (selector)
+			next: '#cycle-next', 	// Selector to scroll next (selector)
+			speed: 500,				// Speed to scroll elements (int)
+			containerSize: false,	// Override default size (int with size)
+			show: 4,				// Items to show from the list (int)
+			start: false,			// Override the start with a defined value (int)
+			jumpTo: false,			// Selectors to use as jump list
+			vertical: false,		// Whether Scroll is for vertical
+			scrollCount: 1			// How many elements to scroll when clicking next / prev	
 		};
 		
-		var options = $.extend(defaults, options);
+		var opts = $.extend(defaults, opts);
 				
 		return this.each(function() {
-
 			var totalElems = $(this).find("li");
 			var maxIndex = totalElems.length - 1;
 			
-			// WORK OUT START INDEX
-			var lowerIndex = (options.overrideStart === false) ? Math.floor((maxIndex - options.showCount + 1) / 2) : options.overrideStart;
-			var elementSize = (options.vertical === false) ? $(this).find("li").outerWidth(true) : $(this).find("li").outerHeight(true);
+			// Calculate the start index. It will either work it out automatically based
+			// on the length of the list or use the provided opts.start value
+			var ll = (opts.start === false) ? Math.floor((maxIndex - opts.showCount + 1) / 2) : opts.start;
+			var size = (opts.vertical === false) ? $(this).find("li").outerWidth(true) : $(this).find("li").outerHeight(true);
 
-			var margin = ((lowerIndex) * elementSize) * -1;
-			var upperIndex = lowerIndex + options.showCount;
+			var margin = ((lowerIndex) * size) * -1;
+			var upperIndex = lowerIndex + opts.showCount;
 			var parent = $(this);
 			
 			// HIDE ARROWS IF NEEDED
-			if(upperIndex >= totalElems.length) $(options.nextElement).hide();
-			if(lowerIndex <= 0) $(options.prevElement).hide(); 
+			if(upperIndex >= totalElems.length) $(opts.next).hide();
+			if(lowerIndex <= 0) $(opts.prev).hide(); 
 			
-			if(options.vertical === false) {
-				$(this).find(options.elementContainer).css({
-					width: (options.containerSize) ? options.containerSize : elementSize * options.showCount,
+			if(opts.vertical === false) {
+				$(this).find(opts.elementContainer).css({
+					width: (opts.containerSize) ? opts.containerSize : size * opts.showCount,
 					overflow: 'hidden'
 				});
 				$(this).find("ul").css({
-					width: (maxIndex + 1) * elementSize,
+					width: (totalElems.length) * size,
 					padding: '0'
 				});
 				
-				$("ul",parent).animate({marginLeft: margin}, options.speed);
+				$("ul",parent).animate({marginLeft: margin}, opts.speed);
 			}
 			else {
-				$(this).find(options.elementContainer).css({
-					height: (options.containerSize) ? options.containerSize : elementSize * options.showCount,
+				$(this).find(opts.elementContainer).css({
+					height: (opts.containerSize) ? opts.containerSize : size * opts.showCount,
 					overflow: 'hidden'
 				});
 				$(this).find("ul").css({
-					height: (maxIndex + 1) * elementSize,
+					height: (totalElems.length) * size,
 					padding: '0'
 				});
 				
-				$("ul",parent).animate({marginTop: margin}, options.speed);
+				$("ul",parent).animate({marginTop: margin}, opts.speed);
 			}
 	
 			var cycle = {
 				next: function() {
 					if(upperIndex <= maxIndex) {
-						$(options.prevElement).show();
-						margin = margin - elementSize;
-						upperIndex = upperIndex + 1;
-						lowerIndex = lowerIndex + 1;
+						$(opts.prev).show();
+
+						var count = ((upperIndex+opts.scrollCount) > maxIndex) ? totalElems.length-upperIndex : opts.scrollCount;
+			
+						margin = margin - (size * count);
+						upperIndex = upperIndex + count;
+						lowerIndex = lowerIndex + count;
 						
-						if(options.vertical === false)
-							$("ul",parent).animate({marginLeft: margin},options.speed);
+						if(opts.vertical === false)
+							$("ul",parent).animate({marginLeft: margin},opts.speed);
 						else
-							$("ul",parent).animate({marginTop: margin},options.speed);
+							$("ul",parent).animate({marginTop: margin},opts.speed);
 							
-						if(upperIndex > maxIndex) $(options.nextElement).hide();
+						if(upperIndex > maxIndex) $(opts.next).hide();
 					}
 				},
 				prev: function() {
 					if(lowerIndex >= 0) {
-						$(options.nextElement).show();	
-						upperIndex = upperIndex - 1;
-						lowerIndex = lowerIndex - 1;
-						margin = margin + elementSize;
+						$(opts.next).show();	
 						
-						if(options.vertical === false)
-							$("ul",parent).animate({marginLeft: margin}, options.speed);
+						var count = ((lowerIndex-opts.scrollCount) < 0) ? lowerIndex : opts.scrollCount;
+						
+						upperIndex = upperIndex - count;
+						lowerIndex = lowerIndex - count;
+						margin = margin + (size * count);
+						
+						if(opts.vertical === false)
+							$("ul",parent).animate({marginLeft: margin}, opts.speed);
 						else
-							$("ul",parent).animate({marginTop: margin},options.speed);
+							$("ul",parent).animate({marginTop: margin},opts.speed);
 							
-						if((lowerIndex-1) < 0) $(options.prevElement).hide();
+						if((lowerIndex-1) < 0) $(opts.prev).hide();
 					}
 				},
 				toPoint: function(pos) {
@@ -105,7 +120,7 @@
 					if(pos == 0) {
 						// jump to end
 						upperIndex = maxIndex + 1;
-						lowerIndex = upperIndex - options.showCount;
+						lowerIndex = upperIndex - opts.showCount;
 					}
 					else if(pos < 0) {
 						// offset from end
@@ -115,32 +130,35 @@
 					else {
 						// offset from start
 						lowerIndex = pos - 1;
-						upperIndex = lowerIndex + options.showCount;
+						upperIndex = lowerIndex + opts.showCount;
 					}
 					// if the upper index is 
-					margin = margin + (elementSize * (oldUpper-upperIndex));
+					margin = margin + (size * (oldUpper-upperIndex));
 					
-					if(options.vertical === false) 
-						$("ul",parent).animate({marginLeft: margin},options.speed);
+					if(opts.vertical === false) 
+						$("ul",parent).animate({marginLeft: margin},opts.speed);
 					else 
-						$("ul",parent).animate({marginTop: margin},options.speed);
+						$("ul",parent).animate({marginTop: margin},opts.speed);
 						
-					if(upperIndex >= maxIndex) $(options.nextElement).hide();
-					else $(options.nextElement).show();
+					if(upperIndex >= maxIndex) $(opts.next).hide();
+					else $(opts.next).show();
 					
-					if(lowerIndex == 0) $(options.prevElement).hide();
-					else $(options.prevElement).show();
+					if(lowerIndex == 0) $(opts.prev).hide();
+					else $(opts.prev).show();
 				}
-			}
+			};
 				
 			// CLICK
-			$(options.nextElement).live('click', function(){ cycle.next(); return false; });
-			$(options.prevElement).live('click', function(){ cycle.prev(); return false; });
+
+			$(opts.next).live('click', function(){ cycle.next();return false; });
+			$(opts.prev).live('click', function(){ cycle.prev(); return false; });
 
 			// JUMP
-			if(options.jumpTo) {
-				$(options.jumpTo).live('click', function() { cycle.toPoint($(this).attr('rel')); return false; });
+			if(opts.jumpTo) {
+				$(opts.jumpTo).live('click', function() { 
+					cycle.toPoint($(this).data('position')); return false; 
+				});
 			}
 		});	
-	};
+	}
 })(jQuery);
