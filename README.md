@@ -1,14 +1,13 @@
 # Multiple Elements Cycle Plugin
 
-Provides a simple preview scrolling panel of list items. Shows the given range of li items from the middle (hiding the edges items) and allows scrolling left and right within the list. Does not handle automatic scrolling or wrapping items around.
+Plugin provides a simple tool for creating a scrolling panel of DOM nodes within a list. Shows the given range of li items from the middle (hiding the edge items) and allows scrolling left and right within the list. Does not handle automatic scrolling or wrapping items around as of yet.
 
 ## Install
 
-See demo/index.html for examples. 
+See the provided index.html for examples. 
 
 You only need to include 2 javascript files in your project. jQuery and the Multiple Elements Cycle.
 
-	<script src="../vendor/jquery-1.4.2.min.js">
 	<script src="../jquery.multipleelements.cycle.js">
 	
 You should not link to styles.css completely, instead include at least the following lines in your own css
@@ -22,8 +21,15 @@ You should not link to styles.css completely, instead include at least the follo
 	
 ### Configuration
 
-Options which you can configure the plugin with $("#scoller").multipleElementsCycle(options); where options is an javascript object made up
-of the following options.
+There are several options available to customize the plugins behaviour. They can be passed as a javascript object to the plugin initialization. 
+
+	$(".mydiv").multipleElementsCycle({
+		'option': 'value',
+		'option2': 'value'
+	});
+	
+All the available options are listed below.
+
 	
 <table>
 	<thead>
